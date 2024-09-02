@@ -1,0 +1,334 @@
+/* main file */
+
+@font-face {
+    font-family: 'CustomFont'; /* This is the name that will be used in CSS */
+    src: url('fonts/arbutus-slab.regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    /*scale: 100%;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'CustomFont', serif;
+    background-color: #333;
+}
+
+.board {
+    display: grid;
+    grid-template-areas:
+        "top-space top-space top-space"
+        "left-space center-space right-space"
+        "bottom-space bottom-space bottom-space";
+    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
+    width: 80vw;
+    height: 80vh;
+    gap: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-space {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 2px dashed #ccc;
+}
+
+.top-space {
+    position: relative;
+    grid-area: top-space;
+}
+
+.left-space {
+    grid-area: left-space;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.deck-container {
+    grid-area: center-space;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-space {
+    grid-area: right-space;
+    flex-direction: row-reverse;
+    overflow: hidden;
+}
+
+.bottom-space {
+    position: relative;
+    grid-area: bottom-space;
+}
+
+#deck {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-container {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Label styling */
+.label-top {
+    padding-left: 30%;
+}
+
+/* Label styling */
+.label-bottom {
+    padding-right: 30%;
+}
+
+/* Cards */
+/* Perspective container for the 3D effect */
+.card {
+    position: relative;
+    /*scale: 90%; */
+    --width: 14em;
+    --height: calc(var(--width) * 1.5);
+    width: var(--width);
+    height: var(--height);
+    transform-style: preserve-3d; /* Enable 3D flip */
+    transition: transform 0.8s ease; /* Smooth flip animation */
+}
+
+/* Stack cards */
+.card {
+    z-index: 1;
+}
+
+.bottom-space > .card, .top-space > .card, #deck > .card {
+    position: absolute;
+}
+
+/* Flip the card on click (toggle the is-flipped class) */
+.card.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* The front and back faces */
+.card-face {
+    position: absolute;
+    backface-visibility: hidden; /* Hides the face when flipped */
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+}
+
+/* Front face (existing design) */
+.card-front {
+    display: grid;
+    grid-template-areas:
+      "top-left top-border top-right"
+      "left-border center right-border"
+      "bottom-left bottom-border bottom-right";
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    border: 0.1rem solid #503b2c;
+
+    /* Add the SVG overlay */
+    background-image: url('img/burned_overlay_1.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 1; /* Adjust the opacity of the overlay */
+
+    /* Add brightness filter */
+    filter: brightness(1.3); /* Increase the brightness slightly (1.3x normal) */
+    overflow: hidden;
+}
+
+.center-design {
+    grid-area: center;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.corner {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.corner > span.rank {
+    font-size: 1.8rem;
+}
+
+.top-left {
+    grid-area: top-left;
+}
+
+.bottom-right {
+    grid-area: bottom-right;
+    transform: rotate(180deg);
+}
+
+/* Back face */
+.card-back {
+    display: flex;
+    position: relative; /* Ensure positioning context for the absolute back-design */
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(180deg);
+    overflow: hidden; /* Clip anything that goes beyond the card's edges */
+}
+
+/* The SVG design for the back of the card */
+.back-design {
+    position: absolute;
+    background: url('img/card_back.svg') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+/*************** SPADES ***************/
+.spades .corner > .svg-suit {
+    background: url('img/spades/spades_icon.svg') no-repeat center center;
+    background-size: contain;
+    width: 2rem;
+    height: 2rem;
+}
+
+/*--------------- Ace --------------*/
+.spades.ace .center-design > .ace-symbol {
+    background: url('img/spades/ace_spades_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+
+/*--------------- King --------------*/
+/*
+.spades.king .center-design > .king-symbol {
+    background: url('img/spades/king_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+    */
+
+/*--------------- Queen --------------*/
+/*
+.spades.queen .center-design > .queen-symbol {
+    background: url('img/spades/queen_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+    */
+
+/*--------------- Jack --------------*/
+/*
+.spades.jack .center-design > .jack-symbol {
+    background: url('img/spades/jack_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+    */
+
+
+
+
+
+
+
+
+/*************** HEARTHS ***************/
+.hearts .corner > .svg-suit {
+    background: url('img/hearts/hearts_icon.svg') no-repeat center center;
+    background-size: contain;
+    width: 2rem;
+    height: 2rem;
+}
+
+/*--------------- Ace --------------*/
+.hearts.ace .center-design > .ace-symbol {
+    background: url('img/hearts/ace_hearts_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+
+
+
+
+
+
+
+
+
+/*************** DIAMONDS ***************/
+.diamonds .corner > .svg-suit {
+    background: url('img/diamonds/diamonds_icon.svg') no-repeat center center;
+    background-size: contain;
+    width: 2rem;
+    height: 2rem;
+}
+
+/*--------------- Ace --------------*/
+.diamonds.ace .center-design > .ace-symbol {
+    background: url('img/diamonds/ace_diamonds_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+
+
+
+
+
+
+
+
+
+/*************** CLUBS ***************/
+.clubs .corner > .svg-suit {
+    background: url('img/clubs/clubs_icon.svg') no-repeat center center;
+    background-size: contain;
+    width: 2rem;
+    height: 2rem;    
+}
+
+/*--------------- Ace --------------*/
+.clubs.ace .center-design > .ace-symbol {
+    background: url('img/clubs/ace_clubs_center.svg') no-repeat center center;
+    background-size: contain;
+    width: 10rem;
+    height: 10rem;
+}
+
+
